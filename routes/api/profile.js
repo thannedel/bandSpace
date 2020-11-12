@@ -143,6 +143,7 @@ router.get('/user/:user_id', async (req, res) => {
 
 router.delete('/', auth, async (req, res) => {
     try {
+        
         //@todo-remove users posts
 
         // Remove profile
