@@ -148,7 +148,7 @@ router.delete('/', auth, async (req, res) => {
 
         // Remove profile
         await Profile.findOneAndRemove({ user: req.user.id });
-//Remove user
+        //Remove user
         await User.findOneAndRemove({ _id: req.user.id });
         res.json({ msg: 'User deleted' });
     } catch (err) {
@@ -176,7 +176,7 @@ router.delete('/', auth, async (req, res) => {
 })
 
 //@route PUT api/profile/events
-//@desc Add profile experience
+//@desc Add profile event
 //@access Private
 
 router.put('/events', [auth, [
