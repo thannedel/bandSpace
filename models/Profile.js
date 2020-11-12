@@ -12,11 +12,11 @@ user: {
   location: {
     type: String
   },
-  status: {
+  status: {                   // band, composer, songwriter etc.
     type: String,
     required: true
   },
-  genre: {
+  genres: {
     type: [String],
     required: true
   },
@@ -52,7 +52,7 @@ user: {
     ],
   events: [
     {
-      eventHal: {
+      eventHall: {
         type: String,
         required: true
       },
