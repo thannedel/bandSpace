@@ -213,5 +213,31 @@ router.put('/events', [auth, [
             console.error(err.message);
             res.status(500).send('Server Error');
         }
-    });
+});
+    
+//@route DELETE api/profile/events/:event_id
+//@desc  DELETE event from profile
+//@access Private
+router.delete('/events/:event_id', auth, async(req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+
+        //Get remove index
+        const removeIndex = profile.events.map(item => item.id).indexOf(req.params.event_id);
+
+        profile.events.splice(removeIndex, 1);
+
+        await profile.save();
+
+        res.json(profile);
+
+    } catch (err) {
+        console.error(err.message);
+            res.status(500).send('Server Error');
+    }
+})
+
+
+
+
 module.exports = router;
