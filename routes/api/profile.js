@@ -237,7 +237,67 @@ router.delete('/events/:event_id', auth, async(req, res) => {
     }
 })
 
+//@route PUT api/profile/discography
+//@desc Add profile disk
+//@access Private
 
+router.put('/discography', [auth, [
+    check('title', 'The title is required').not().isEmpty(),
+    check('releaseType', 'type is required').not().isEmpty(),
+    check('releaseDate', 'date is required').not().isEmpty()
+]], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+        title,
+        releaseType,
+        releaseDate,
+        description
+    } = req.body;
+
+        const newDisk = {
+        title,
+        releaseType,
+        releaseDate,
+        description
+        }
+
+        try {
+            const profile = await Profile.findOne({ user: req.user.id });
+
+            profile.discography.unshift(newDisk);
+            await profile.save();
+            res.json(profile);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+});
+    
+//@route DELETE api/profile/discography/:disk_id
+//@desc  DELETE disk from profile
+//@access Private
+router.delete('/discography/:disk_id', auth, async(req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+
+        //Get remove index
+        const removeIndex = profile.discography.map(item => item.id).indexOf(req.params.disk_id);
+
+        profile.discography.splice(removeIndex, 1);
+
+        await profile.save();
+
+        res.json(profile);
+
+    } catch (err) {
+        console.error(err.message);
+            res.status(500).send('Server Error');
+    }
+})
 
 
 module.exports = router;
