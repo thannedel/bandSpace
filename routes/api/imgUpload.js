@@ -3,8 +3,8 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require('multer');
 const auth = require('../../middleware/auth');
-const { replaceOne } = require("../../models/ImgUpload");
-//const upload = multer({dest: 'uploads/'})
+//const { replaceOne } = require("../../models/ImgUpload");
+
 
 const ImgUpload = require('../../models/ImgUpload');
 const User = require('../../models/User');
@@ -37,8 +37,9 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-
-
+// @route    POST api/imgUpload
+// @desc     Upload image
+// @access   Private
 router.post("/",auth, upload.single('photo'), (req, res, next) => {
     
     
@@ -74,8 +75,11 @@ router.post("/",auth, upload.single('photo'), (req, res, next) => {
 });
 
 
-router.get("/", (req, res, next) => {
-  ImgUpload.find()
+//@route Get api/imgUpload/user/:user_id
+//@desc Get images by user ID
+//@access Public
+router.get("/user/:user_id", (req, res, next) => {
+  ImgUpload.find({user:req.params.user_id})
     .select("user _id photo")
     .exec()
     .then(docs => {
